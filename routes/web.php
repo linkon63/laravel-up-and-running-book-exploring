@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
@@ -60,6 +61,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/post/{id}', [PostController::class, 'destroy'])->name('post.delete');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/friend', [FriendController::class, 'index'])->name('friend.index');
+    Route::post('/friend', [FriendController::class, 'store'])->name('friend.store');
+    Route::patch('/friend', [FriendController::class, 'update'])->name('friend.update');
+    Route::delete('/friend/{id}', [FriendController::class, 'destroy'])->name('friend.delete');
+});
 
 
 require __DIR__ . '/auth.php';

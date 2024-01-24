@@ -15,7 +15,8 @@ class PostController extends Controller
     public function index()
     {
         return Inertia::render('Post', [
-            // 'test' => Test::orderBy('created_at', 'desc')->get(),
+            'post' => Post::where('user_id', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get(),
+            'status' => true,
         ]);
     }
 
@@ -40,7 +41,7 @@ class PostController extends Controller
             'user_id' => $user->id,
         ]);
         return Inertia::render('Post', [
-            'post' => Post::orderBy('created_at', 'desc')->get(),
+            'post' => Post::where('user_id', '=', Auth::user()->id)->orderBy('created_at', 'desc')->get(),
             'status' => true,
         ]);
     }
@@ -64,9 +65,13 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        Post::where('id', $request->id)->update(['title' => $request->title, 'description' => $request->description]);
+        return Inertia::render('Post', [
+            'post' => Post::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->get(),
+            'status' => true,
+        ]);
     }
 
     /**
@@ -74,6 +79,10 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Post::where('id', $id)->delete();
+        return Inertia::render('Post', [
+            'post' => Post::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->get(),
+            'status' => true,
+        ]);
     }
 }
